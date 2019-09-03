@@ -1,7 +1,9 @@
 #  FF14 国服官网自动签到脚本
 
 1.作用  
-&nbsp;&nbsp;使用 python 的 requests 库, 实现 FF14 国服官网自动签到.
+&nbsp;&nbsp;使用 python 的 requests 库, 实现 FF14 国服官网自动签到  
+示例:  
+![示例](example.png "示例")
 
 2.安装
   1. 安装 Python 解释器 [Python 官网](https://www.python.org/)
