@@ -28,6 +28,8 @@ headers = {
 # 提交用户名和密码, 获取ticket
 def step1() -> str:
     global cookies
+    logging.info("将以 %s/%s 登录" % (Config.login_name, Config.login_password))
+    time.sleep(1)
     params = {
         "callback": "staticLogin_JSONPMethod",
         "inputUserId": Config.login_name,
@@ -54,7 +56,6 @@ def step1() -> str:
     for c in cookie:
         cookies.setdefault(c[0], c[1])
     text = r.text
-    print(text)
     # 需要验证码
     # staticLogin_JSONPMethod({ "return_code": 0, "error_type": 0, "return_message": "", "data": { "appId": 991000350, "areaId": 1001, "checkCodeUrl": "https:\/\/login.sdo.com\/sdo\/Login\/login_alitest.php?appkey=FFFF0000000001795A0A&scene=login", "guid": "6A87E461D3FD4427B180B475D66DA763unilinuxmc", "imagecodeType": 2, "isNeedFullInfo": 0, "nextAction": 8, "sdg_height": 276, "sdg_width": 320, "sndaId": "3494960800" } })
     # 不需要验证码
@@ -72,6 +73,7 @@ def step1() -> str:
 # 设置cookie
 def step2():
     global cookies
+    time.sleep(1)
     url = "http://login.sdo.com/sdo/Login/Tool.php"
     params = {
         "value": "index|%s" % Config.login_name,
@@ -81,8 +83,6 @@ def step2():
     }
     # 不返回值
     r = requests.get(url, params=params, cookies=cookies)
-    print("step2")
-    print(r.cookies.items())
     cookie = r.cookies.items()
     for c in cookie:
         cookies.setdefault(c[0], c[1])
@@ -91,6 +91,7 @@ def step2():
 # 设置cookie
 def step3():
     global cookies
+    time.sleep(1)
     url = "https://cas.sdo.com/authen/getPromotionInfo.jsonp"
     params = {
         "callback": "getPromotionInfo_JSONPMethod",
@@ -110,9 +111,6 @@ def step3():
         "_": "1566623599098",
     }
     r = requests.get(url, params=params, cookies=cookies)
-    print("setp3")
-    print(r.text)
-    print(r.cookies.items())
     cookie = r.cookies.items()
     for c in cookie:
         cookies.setdefault(c[0], c[1])
@@ -121,11 +119,9 @@ def step3():
 # 设置cookie
 def step4(ticket: str):
     global cookies
-    print("setp4")
+    time.sleep(1)
     url = "http://act.ff.sdo.com/20180707jifen/Server/SDOLogin.ashx?returnPage=index.html&ticket=" + ticket
     r = requests.get(url, cookies=cookies)
-    print(r.text)
-    print(r.cookies.items())
     cookie = r.cookies.items()
     for c in cookie:
         cookies.setdefault(c[0], c[1])
@@ -134,7 +130,7 @@ def step4(ticket: str):
 
 # 查询角色列表
 def step5() -> str:
-    print("step5")
+    time.sleep(1)
     ipid = "1"
     if Config.area_name == "莫古力":
         ipid = "6"
@@ -145,7 +141,6 @@ def step5() -> str:
         "i": "0.8075943537407986",
     }
     r = requests.get(url, params=params, cookies=cookies)
-    print(r.text)
     text = r.text
     # text = '{"Code":1,"Message":"成功","Attach":[{"cicuid":"11412792","areaName":null,"groupName":null,"realRoleName":null,"name":"南五猫大王","worldname":"JingYuZhuangYuan","characterstatus":1,"lodestoneid":null,"renameflag":false,"worldnameZh":"静语庄园","ipid":0,"groupid":24,"AreaId":0,"characterid":null},{"characterstatus":1,"cicuid":"12061680","lodestoneid":null,"name":"南五猫","renameflag":false,"worldname":"ShenYiZhiDi","areaName":null,"groupName":null,"realRoleName":null,"worldnameZh":"神意之地","ipid":0,"groupid":23,"AreaId":0,"characterid":null},{"characterstatus":1,"cicuid":"12061275","lodestoneid":null,"name":"南五猫大王","renameflag":false,"worldname":"ShenYiZhiDi","areaName":null,"groupName":null,"realRoleName":null,"worldnameZh":"神意之地","ipid":0,"groupid":23,"AreaId":0,"characterid":null},{"characterstatus":1,"cicuid":"11412830","lodestoneid":null,"name":"南五猫","renameflag":false,"worldname":"ZiShuiZhanQiao","areaName":null,"groupName":null,"realRoleName":null,"worldnameZh":"紫水栈桥","ipid":0,"groupid":4,"AreaId":0,"characterid":null}],"Success":true}'
     obj = json.loads(text)
@@ -154,15 +149,16 @@ def step5() -> str:
     logging.info("正在获取角色列表...")
     for r in attach:
         if r["worldnameZh"] == Config.server_name and r["name"] == Config.role_name:
-            logging.info("获取角色成功...")
+            logging.info("获取角色列表成功...")
             return role.format(r["cicuid"], r["worldname"], r["groupid"])
-    logging.error("获取角色失败...")
+    logging.error("获取角色列表失败...")
     return ""
 
 
 # 选择区服及角色
 def step6(role: str):
     global cookies
+    time.sleep(1)
     url = "http://act.ff.sdo.com/20180707jifen/Server/ff14/HGetRoleList.ashx"
     AreaId = "1"
     if Config.area_name == "莫古力":
@@ -179,21 +175,22 @@ def step6(role: str):
     cookie = r.cookies.items()
     for c in cookie:
         cookies.setdefault(c[0], c[1])
-    logging.info("选择角色...")
+    logging.info("已选择目标角色...")
 
 
 # 签到
 def step7():
     global cookies
+    time.sleep(1)
+    logging.info("正在签到...")
     url = "http://act.ff.sdo.com/20180707jifen/Server/User.ashx"
     params = {
         "method": "signin",
         "i": "0.855755357775076"
     }
     r = requests.post(url, params=params, cookies=cookies)
-    print("step7")
-    print(r.text)
-    print(r.cookies.items())
+    obj = json.loads(r.text)
+    logging.info(obj["Message"])
 
 
 def main():
@@ -207,7 +204,7 @@ def main():
     if role == "":
         return
     step6(role)
-    print(cookies)
+    step7()
 
 
 if __name__ == "__main__":

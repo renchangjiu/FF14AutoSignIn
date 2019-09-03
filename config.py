@@ -3,9 +3,9 @@ class Config(object):
     login_name = "abc@163.com"
 
     # 登录密码
-    login_password = "password"
+    login_password = "answers"
 
-    # 大区名, 陆行鸟 or 莫古力
+    # 大区名(陆行鸟 or 莫古力), 暂不支持莫古力区
     area_name = "陆行鸟"
 
     # 服务器名
