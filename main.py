@@ -193,6 +193,21 @@ def step7():
     logging.info(obj["Message"])
 
 
+# 查询当前积分
+def step8():
+    time.sleep(1)
+    url = "http://act.ff.sdo.com/20180707jifen/Server/User.ashx"
+    params = {
+        "method": "querymystatus",
+        "i": "0.855755357775076"
+    }
+    r = requests.post(url, params=params, cookies=cookies)
+    obj = json.loads(r.text)
+    attach = obj["Attach"]
+    jifen = json.loads(attach)["Jifen"]
+    logging.info("当前积分为: %d" % jifen)
+
+
 def main():
     ticket = step1()
     if ticket == "":
@@ -205,6 +220,7 @@ def main():
         return
     step6(role)
     step7()
+    step8()
 
 
 if __name__ == "__main__":
