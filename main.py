@@ -1,12 +1,11 @@
 import json
 import time
-import logging
 
 import requests
 
 from config import Config
+from logger import logger
 
-logging.basicConfig(format='%(asctime)s, %(levelname)s: %(message)s', level=logging.INFO)
 cookies = {}
 headers = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
@@ -28,8 +27,7 @@ headers = {
 # 提交用户名和密码, 获取ticket
 def step1() -> str:
     global cookies
-    logging.info("将以 %s/%s 登录" % (Config.login_name, Config.login_password))
-    time.sleep(1)
+    logger.info("将以 %s/%s 登录" % (Config.login_name, Config.login_password))
     params = {
         "callback": "staticLogin_JSONPMethod",
         "inputUserId": Config.login_name,
@@ -63,17 +61,16 @@ def step1() -> str:
     text = text[text.find("(") + 1: text.rfind(")")]
     obj = json.loads(text)
     if "ticket" in obj["data"]:
-        logging.info("登录成功, 正在设置cookie...")
+        logger.info("登录成功, 正在设置cookie...")
         return obj["data"]["ticket"]
     else:
-        logging.error("登录失败, 短期内登录失败次数过多, 服务器已开启验证码, 请在1-3天后再试...")
+        logger.error("登录失败, 短期内登录失败次数过多, 服务器已开启验证码, 请在1-3天后再试...")
         return ""
 
 
 # 设置cookie
 def step2():
     global cookies
-    time.sleep(1)
     url = "http://login.sdo.com/sdo/Login/Tool.php"
     params = {
         "value": "index|%s" % Config.login_name,
@@ -91,7 +88,6 @@ def step2():
 # 设置cookie
 def step3():
     global cookies
-    time.sleep(1)
     url = "https://cas.sdo.com/authen/getPromotionInfo.jsonp"
     params = {
         "callback": "getPromotionInfo_JSONPMethod",
@@ -119,18 +115,16 @@ def step3():
 # 设置cookie
 def step4(ticket: str):
     global cookies
-    time.sleep(1)
     url = "http://act.ff.sdo.com/20180707jifen/Server/SDOLogin.ashx?returnPage=index.html&ticket=" + ticket
     r = requests.get(url, cookies=cookies)
     cookie = r.cookies.items()
     for c in cookie:
         cookies.setdefault(c[0], c[1])
-    logging.info("设置cookie成功...")
+    logger.info("设置cookie成功...")
 
 
 # 查询角色列表
 def step5() -> str:
-    time.sleep(1)
     ipid = "1"
     if Config.area_name == "莫古力":
         ipid = "6"
@@ -146,19 +140,18 @@ def step5() -> str:
     obj = json.loads(text)
     attach = obj["Attach"]
     role = "{0}|{1}|{2}"
-    logging.info("正在获取角色列表...")
+    logger.info("正在获取角色列表...")
     for r in attach:
         if r["worldnameZh"] == Config.server_name and r["name"] == Config.role_name:
-            logging.info("获取角色列表成功...")
+            logger.info("获取角色列表成功...")
             return role.format(r["cicuid"], r["worldname"], r["groupid"])
-    logging.error("获取角色列表失败...")
+    logger.error("获取角色列表失败...")
     return ""
 
 
 # 选择区服及角色
 def step6(role: str):
     global cookies
-    time.sleep(1)
     url = "http://act.ff.sdo.com/20180707jifen/Server/ff14/HGetRoleList.ashx"
     AreaId = "1"
     if Config.area_name == "莫古力":
@@ -175,14 +168,13 @@ def step6(role: str):
     cookie = r.cookies.items()
     for c in cookie:
         cookies.setdefault(c[0], c[1])
-    logging.info("已选择目标角色...")
+    logger.info("已选择目标角色...")
 
 
 # 签到
 def step7():
     global cookies
-    time.sleep(1)
-    logging.info("正在签到...")
+    logger.info("正在签到...")
     url = "http://act.ff.sdo.com/20180707jifen/Server/User.ashx"
     params = {
         "method": "signin",
@@ -190,12 +182,11 @@ def step7():
     }
     r = requests.post(url, params=params, cookies=cookies)
     obj = json.loads(r.text)
-    logging.info(obj["Message"])
+    logger.info(obj["Message"])
 
 
 # 查询当前积分
 def step8():
-    time.sleep(1)
     url = "http://act.ff.sdo.com/20180707jifen/Server/User.ashx"
     params = {
         "method": "querymystatus",
@@ -205,7 +196,7 @@ def step8():
     obj = json.loads(r.text)
     attach = obj["Attach"]
     jifen = json.loads(attach)["Jifen"]
-    logging.info("当前积分为: %d" % jifen)
+    logger.info("当前积分为: %d" % jifen)
 
 
 def main():
@@ -224,4 +215,5 @@ def main():
 
 
 if __name__ == "__main__":
+    # pass
     main()
