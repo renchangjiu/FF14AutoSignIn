@@ -212,6 +212,7 @@ def main():
     step6(role)
     step7()
     step8()
+    time.sleep(5)
 
 
 if __name__ == "__main__":
