@@ -5,7 +5,7 @@ class Config(object):
     # 登录密码
     login_password = "answers"
 
-    # 大区名(陆行鸟 or 莫古力), 暂不支持莫古力区
+    # 大区名(陆行鸟 or 莫古力)
     area_name = "陆行鸟"
 
     # 服务器名
