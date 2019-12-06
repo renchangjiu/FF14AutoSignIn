@@ -32,8 +32,8 @@ def step1() -> str:
         "callback": "staticLogin_JSONPMethod",
         "inputUserId": Config.login_name,
         "password": Config.login_password,
-        "appId": "991000350",
-        "areaId": "1001",
+        "appId": "100001900",
+        "areaId": "1",
         "serviceUrl": "http://act.ff.sdo.com/20180707jifen/Server/SDOLogin.ashx?returnPage=index.html",
         "productVersion": "v5",
         "frameType": "3",
@@ -51,13 +51,10 @@ def step1() -> str:
     url = "https://cas.sdo.com/authen/staticLogin.jsonp"
     r = requests.get(url, params=params, headers=headers)
     cookie = r.cookies.items()
+
     for c in cookie:
         cookies.setdefault(c[0], c[1])
     text = r.text
-    # 需要验证码
-    # staticLogin_JSONPMethod({ "return_code": 0, "error_type": 0, "return_message": "", "data": { "appId": 991000350, "areaId": 1001, "checkCodeUrl": "https:\/\/login.sdo.com\/sdo\/Login\/login_alitest.php?appkey=FFFF0000000001795A0A&scene=login", "guid": "6A87E461D3FD4427B180B475D66DA763unilinuxmc", "imagecodeType": 2, "isNeedFullInfo": 0, "nextAction": 8, "sdg_height": 276, "sdg_width": 320, "sndaId": "3494960800" } })
-    # 不需要验证码
-    # staticLogin_JSONPMethod({ "return_code": 0, "error_type": 0, "return_message": "", "data": { "appId": 991000350, "areaId": 1001, "isNeedFullInfo": 0, "nextAction": 0, "sndaId": "3494960800", "ticket": "ULS21-74e4c0451a5d49c9a517fbdcb0f308bd" } })
     text = text[text.find("(") + 1: text.rfind(")")]
     obj = json.loads(text)
     if "ticket" in obj["data"]:
@@ -78,7 +75,6 @@ def step2():
         "name": "CURRENT_TAB",
         "r": "0.8326684884385089",
     }
-    # 不返回值
     r = requests.get(url, params=params, cookies=cookies)
     cookie = r.cookies.items()
     for c in cookie:
@@ -136,7 +132,6 @@ def step5() -> str:
     }
     r = requests.get(url, params=params, cookies=cookies)
     text = r.text
-    # text = '{"Code":1,"Message":"成功","Attach":[{"cicuid":"11412792","areaName":null,"groupName":null,"realRoleName":null,"name":"南五猫大王","worldname":"JingYuZhuangYuan","characterstatus":1,"lodestoneid":null,"renameflag":false,"worldnameZh":"静语庄园","ipid":0,"groupid":24,"AreaId":0,"characterid":null},{"characterstatus":1,"cicuid":"12061680","lodestoneid":null,"name":"南五猫","renameflag":false,"worldname":"ShenYiZhiDi","areaName":null,"groupName":null,"realRoleName":null,"worldnameZh":"神意之地","ipid":0,"groupid":23,"AreaId":0,"characterid":null},{"characterstatus":1,"cicuid":"12061275","lodestoneid":null,"name":"南五猫大王","renameflag":false,"worldname":"ShenYiZhiDi","areaName":null,"groupName":null,"realRoleName":null,"worldnameZh":"神意之地","ipid":0,"groupid":23,"AreaId":0,"characterid":null},{"characterstatus":1,"cicuid":"11412830","lodestoneid":null,"name":"南五猫","renameflag":false,"worldname":"ZiShuiZhanQiao","areaName":null,"groupName":null,"realRoleName":null,"worldnameZh":"紫水栈桥","ipid":0,"groupid":4,"AreaId":0,"characterid":null}],"Success":true}'
     obj = json.loads(text)
     attach = obj["Attach"]
     role = "{0}|{1}|{2}"
@@ -216,5 +211,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # pass
     main()
