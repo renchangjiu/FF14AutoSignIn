@@ -121,9 +121,13 @@ def step4(ticket: str):
 
 # 查询角色列表
 def step5() -> str:
-    ipid = "1"
-    if Config.area_name == "莫古力":
+    ipid = ""
+    if Config.area_name == "陆行鸟":
+        ipid = "1"
+    elif Config.area_name == "莫古力":
         ipid = "6"
+    else:
+        ipid = "7"
     url = "http://act.ff.sdo.com/20180707jifen/Server/ff14/HGetRoleList.ashx"
     params = {
         "method": "queryff14rolelist",
@@ -148,9 +152,13 @@ def step5() -> str:
 def step6(role: str):
     global cookies
     url = "http://act.ff.sdo.com/20180707jifen/Server/ff14/HGetRoleList.ashx"
-    AreaId = "1"
-    if Config.area_name == "莫古力":
+    AreaId = ""
+    if Config.area_name == "陆行鸟":
+        AreaId = "1"
+    elif Config.area_name == "莫古力":
         AreaId = "6"
+    else:
+        AreaId = "7"
     params = {
         "method": "setff14role",
         "AreaId": AreaId,
