@@ -202,17 +202,6 @@ def step8():
     logger.info("当前积分为: %d" % jifen)
 
 
-def step9():
-    url = "http://act.ff.sdo.com/20191225Christmas/Server/User.ashx"
-    params = {
-        "method": "signin",
-        "i": "0.5218470090028671"
-    }
-    r = requests.post(url, params=params, cookies=cookies)
-    obj = json.loads(r.text)
-    print(obj)
-
-
 def main():
     ticket = step1()
     if ticket == "":
@@ -226,7 +215,6 @@ def main():
     step6(role)
     step7()
     step8()
-    step9()
     time.sleep(5)
 
 
