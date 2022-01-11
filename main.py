@@ -7,6 +7,17 @@ from config import Config
 from logger import logger
 
 
+def get_area_id():
+    if Config.area_name == "陆行鸟":
+        return "1"
+    elif Config.area_name == "莫古力":
+        return "6"
+    elif Config.area_name == "猫小胖":
+        return "7"
+    else:
+        return "8"
+
+
 class Shana(object):
     headers = {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
@@ -112,13 +123,7 @@ class Shana(object):
 
     # 查询角色列表
     def step5(self) -> str:
-        ipid = ""
-        if Config.area_name == "陆行鸟":
-            ipid = "1"
-        elif Config.area_name == "莫古力":
-            ipid = "6"
-        else:
-            ipid = "7"
+        ipid = get_area_id()
         url = "http://act.ff.sdo.com/20180707jifen/Server/ff14/HGetRoleList.ashx"
         params = {
             "method": "queryff14rolelist",
@@ -141,13 +146,7 @@ class Shana(object):
     # 选择区服及角色
     def step6(self, role: str):
         url = "http://act.ff.sdo.com/20180707jifen/Server/ff14/HGetRoleList.ashx"
-        AreaId = ""
-        if Config.area_name == "陆行鸟":
-            AreaId = "1"
-        elif Config.area_name == "莫古力":
-            AreaId = "6"
-        else:
-            AreaId = "7"
+        AreaId = get_area_id()
         params = {
             "method": "setff14role",
             "AreaId": AreaId,
