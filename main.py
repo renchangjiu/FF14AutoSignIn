@@ -199,6 +199,10 @@ class Shana(object):
         self.step8()
         time.sleep(5)
 
+#
+#if __name__ == "__main__":
+#    Shana().go()
 
-if __name__ == "__main__":
+
+def index(fun1,fun2):
     Shana().go()

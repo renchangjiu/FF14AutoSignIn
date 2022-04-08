@@ -1,15 +1,15 @@
 class Config(object):
     # 登录名
-    login_name = "ff14@163.com"
+    login_name = "account"
 
     # 登录密码
-    login_password = "answers"
+    login_password = "password"
 
     # 大区名 ( 陆行鸟 or 莫古力 or 猫小胖 or 豆豆柴 )
-    area_name = "猫小胖"
+    area_name = "area"
 
     # 服务器名
-    server_name = "紫水栈桥"
+    server_name = "server"
 
     # 角色名
-    role_name = "南五猫"
+    role_name = "user"
