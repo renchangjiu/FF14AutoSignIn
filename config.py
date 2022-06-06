@@ -1,3 +1,4 @@
+# coding=utf-8
 class Config(object):
     # 登录名
     login_name = "ff14@163.com"
